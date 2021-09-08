@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         //   "/": (context) => NoteHome(),
-        "/AddNote": (context) => AddNote(),
+         "/AddNote": (context) => AddNote(),
         "/ShowNotes": (context) => ShowNotes(),
       },
       home: NoteHome(),

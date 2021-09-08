@@ -26,17 +26,24 @@ class DatabaseProvider {
           content TEXT,
           date_created DATE 
         )
-        '''
-        );
+        ''');
       },
       version: 1,
     );
   }
 
+// Add Fuunction
   addNewNote(Note note) async {
     final db = await database;
     db?.insert("notes", note.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+//Delete Function
+  Future<int> deleteNote(int id) async {
+    final db = await database;
+    int count = await db!.rawDelete("DELETE FROM notes WHERE id = ? ", [id]);
+    return count;
   }
 
   Future<dynamic> getNotes() async {

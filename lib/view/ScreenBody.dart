@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kings_note/db/db_provider.dart';
+import 'package:kings_note/model/NoteModel.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -7,19 +8,18 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  // String? _content;
-  // String? _title;
+  String? content;
+  String? title;
+  DateTime? date;
   bool loading = false;
+
+  int? id;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<List> getNotes() async {
     final notes = await DatabaseProvider.db.getNotes();
     return notes;
-  }
-
-  String name() {
-    return 'Velocity';
   }
 
   @override
@@ -40,24 +40,45 @@ class _BodyState extends State<Body> {
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
-                      itemCount: noteData.data!.length,
+                      itemCount: noteData.data?.length,
                       itemBuilder: (context, index) {
                         String title = noteData.data?[index]["title"];
                         String content = noteData.data?[index]["content"];
-                        // String datecreated =
-                        //     noteData.data?[index]["datecreated"];
-                        // int id = noteData.data?[index]["id"];
-                        return Card(
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context, "/", (route) => false);
-                            },
-                            title: Text(
-                              title,
-                              style: TextStyle(fontSize: 18),
+                        String? datecreated =
+                            noteData.data![index]["datecreated"];
+                        int id = noteData.data?[index]["id"];
+                        return Dismissible(
+                          key: Key(title + index.toString()),
+                          onDismissed: (direction) {
+                            setState(() {
+                              // UserNotifier userNotifier = UserNotifier();
+                              Note note = Note(
+                                id,
+                                content,
+                                date!,
+                                title,
+                              );
+                              DatabaseProvider.db.deleteNote(note.id);
+                            });
+                          },
+                          child: Card(
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.pushNamed(context, "/ShowNotes",
+                                    arguments: Note(
+                                        id,
+                                        content,
+                                        datecreated == null
+                                            ? DateTime.now()
+                                            : DateTime.parse(datecreated),
+                                        title));
+                              },
+                              title: Text(
+                                title,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              subtitle: Text(content),
                             ),
-                            subtitle: Text(content),
                           ),
                         );
                       },

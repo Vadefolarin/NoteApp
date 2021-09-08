@@ -13,7 +13,7 @@ class UserNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  deleteUserNote(index) {
+  deleteUserNote(index, String content) {
     _usernote.removeWhere((_user) => _user.title == userNote[index].title);
     notifyListeners();
   }
