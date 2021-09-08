@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         //   "/": (context) => NoteHome(),
-         "/AddNote": (context) => AddNote(),
+        "/AddNote": (context) => AddNote(),
         "/ShowNotes": (context) => ShowNotes(),
       },
       home: NoteHome(),
@@ -49,8 +49,11 @@ class _NoteHomeState extends State<NoteHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notes"),
-        centerTitle: true,
+        title: Text(
+          "Notes",
+          style: TextStyle(fontSize: 25),
+        ),
+        //centerTitle: true,
         elevation: 0.00,
       ),
       body: Body(),
